@@ -1,0 +1,1300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Management System (DBMS) - Complete Study Guide</title>
+    <style>
+        @media print {
+            @page {
+                margin: 0.75in;
+                size: A4;
+            }
+            body {
+                font-size: 11pt;
+                line-height: 1.4;
+            }
+            .page-break {
+                page-break-before: always;
+            }
+            .no-break {
+                page-break-inside: avoid;
+            }
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 210mm;
+            margin: 0 auto;
+            padding: 20px;
+            background: white;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        .market-alert {
+            background: linear-gradient(135deg, #ff6b6b, #ffa500);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-weight: bold;
+            text-align: center;
+        }
+        
+        .unit-header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 30px 0 20px 0;
+            font-size: 1.5em;
+            font-weight: bold;
+        }
+        
+        .section-header {
+            background: #f8f9fa;
+            border-left: 5px solid #007bff;
+            padding: 10px 15px;
+            margin: 20px 0 15px 0;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        .exam-definition {
+            background: #e8f5e8;
+            border-left: 4px solid #28a745;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .exam-definition::before {
+            content: "📝 Exam Definition: ";
+            font-weight: bold;
+            color: #28a745;
+        }
+        
+        .simple-explanation {
+            background: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        
+        .simple-explanation::before {
+            content: "💡 Simple Explanation: ";
+            font-weight: bold;
+            color: #856404;
+        }
+        
+        .example-box {
+            background: #e7f3ff;
+            border: 1px solid #b3d7ff;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        
+        .example-box::before {
+            content: "🌟 Example: ";
+            font-weight: bold;
+            color: #0066cc;
+        }
+        
+        .market-relevance {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 5px solid #ff6b6b;
+        }
+        
+        .market-relevance::before {
+            content: "🚀 Market Relevance: ";
+            font-weight: bold;
+            color: #d73527;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 15px 0;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        
+        th {
+            background: #f8f9fa;
+            font-weight: bold;
+            color: #333;
+        }
+        
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        
+        .code-block {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 5px;
+            padding: 12px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        
+        .highlight {
+            background: #ffeb3b;
+            padding: 2px 4px;
+            border-radius: 3px;
+        }
+        
+        .wrong::before {
+            content: "❌ Wrong: ";
+            color: #dc3545;
+            font-weight: bold;
+        }
+        
+        .correct::before {
+            content: "✅ Correct: ";
+            color: #28a745;
+            font-weight: bold;
+        }
+        
+        .study-tips {
+            background: #f0f8ff;
+            border: 2px solid #4169e1;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .study-tips h3 {
+            color: #4169e1;
+            margin-bottom: 10px;
+        }
+        
+        ul, ol {
+            margin: 10px 0;
+            padding-left: 25px;
+        }
+        
+        li {
+            margin: 5px 0;
+        }
+        
+        .final-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        
+        .toc {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .toc h2 {
+            color: #333;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .toc ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .toc li {
+            padding: 5px 0;
+            border-bottom: 1px dotted #ccc;
+        }
+        
+        .toc li:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📚 Database Management System (DBMS)</h1>
+        <h2>Complete Super Simple Study Guide</h2>
+        <p>Your ULTIMATE guide to ace DBMS exams and kickstart your database career!</p>
+    </div>
+
+    <div class="toc">
+        <h2>📋 Table of Contents</h2>
+        <ul>
+            <li><strong>Market Relevance Alert</strong> - Why DBMS is crucial for your career</li>
+            <li><strong>Unit 1: Introduction to Database System</strong>
+                <ul>
+                    <li>What is Data & Database</li>
+                    <li>Database Management System (DBMS)</li>
+                    <li>File System vs DBMS</li>
+                    <li>DBMS Architecture (2-Tier & 3-Tier)</li>
+                    <li>Data Models & Codd's 13 Rules</li>
+                </ul>
+            </li>
+            <li><strong>Unit 2: Relational Data Model</strong>
+                <ul>
+                    <li>Relational Structure & Keys</li>
+                    <li>Data Constraints & Functional Dependencies</li>
+                    <li>Normalization (1NF, 2NF, 3NF)</li>
+                    <li>Entity-Relationship (ER) Model</li>
+                    <li>Library Management System Design</li>
+                </ul>
+            </li>
+            <li><strong>Unit 3: SQL and NoSQL</strong>
+                <ul>
+                    <li>SQL Components & Data Types</li>
+                    <li>SQL Queries & Joins</li>
+                    <li>Relational Algebra Operations</li>
+                    <li>NoSQL Types & Comparison</li>
+                </ul>
+            </li>
+            <li><strong>Study Strategy & Career Impact</strong></li>
+        </ul>
+    </div>
+
+    <div class="market-alert">
+        🚀 <strong>Market Relevance Alert!</strong><br>
+        DBMS is <strong>ABSOLUTE FIRE</strong> in today's market! The global DBMS market is worth $239.70 billion and growing at 11.4% annually! Companies are literally throwing money at database professionals - DBAs earn around $84,950-$98,860 annually! So yeah, this stuff is <strong>crucial</strong> for your career!
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- UNIT 1 -->
+    <div class="unit-header">🎯 UNIT 1: Introduction to Database System</div>
+
+    <div class="section-header">What is Data? (The Building Block)</div>
+    <div class="exam-definition">
+        Data is a collection of raw facts and figures that can be stored in various forms like text, numbers, images, or audio files.
+    </div>
+    <div class="simple-explanation">
+        Think of data like ingredients in your mom's kitchen. Rice grains, dal, vegetables - all individual items that don't mean much alone, but when combined properly, they become a delicious meal!
+    </div>
+    <div class="example-box">
+        Your Aadhaar number (123456789012), your name (Yash), your photo - all are individual data pieces.
+    </div>
+
+    <div class="section-header">What is a Database?</div>
+    <div class="exam-definition">
+        A database is an organized collection of interrelated data that can be easily accessed, managed, and updated.
+    </div>
+    <div class="simple-explanation">
+        Imagine your WhatsApp as a database! It stores all your chats (data), organizes them by contacts (structure), lets you search messages (retrieval), and keeps everything safe with encryption (security). Every time you save a contact or send a message, you're doing database operations!
+    </div>
+    
+    <div class="example-box">
+        <strong>Real-Life Use Cases:</strong>
+        <ul>
+            <li><strong>Banking:</strong> Your bank account info, transaction history</li>
+            <li><strong>E-commerce:</strong> Flipkart's product catalog, your order history</li>
+            <li><strong>Social Media:</strong> Instagram's photo storage, user profiles</li>
+            <li><strong>Education:</strong> Your college's student records, attendance</li>
+        </ul>
+    </div>
+
+    <div class="section-header">Database Management System (DBMS)</div>
+    <div class="exam-definition">
+        DBMS is a software that provides an interface between users and databases to store, retrieve, and manage data while ensuring security and integrity.
+    </div>
+    <div class="simple-explanation">
+        DBMS is like FRIDAY (Tony Stark's AI). You ask FRIDAY to "show me all my suits" (query), and it knows exactly where to find them, how to display them, and who's allowed to access them. The suits are your data, the garage is your database, and FRIDAY is your DBMS!
+    </div>
+
+    <div class="no-break">
+        <strong>Key Operations DBMS Performs:</strong>
+        <ol>
+            <li><strong>Data Definition</strong> - Creating tables (like setting up new rooms in your house)</li>
+            <li><strong>Data Manipulation</strong> - Adding, updating, deleting records</li>
+            <li><strong>Data Retrieval</strong> - Searching and displaying data</li>
+            <li><strong>User Administration</strong> - Managing who can access what</li>
+        </ol>
+    </div>
+
+    <div class="section-header">File System vs DBMS - The Game Changer</div>
+    <table>
+        <tr>
+            <th>File System</th>
+            <th>DBMS</th>
+        </tr>
+        <tr>
+            <td>Data scattered everywhere</td>
+            <td>Centralized data storage</td>
+        </tr>
+        <tr>
+            <td>No crash recovery</td>
+            <td>Built-in backup & recovery</td>
+        </tr>
+        <tr>
+            <td>Difficult to share data</td>
+            <td>Easy data sharing</td>
+        </tr>
+        <tr>
+            <td>Data redundancy issues</td>
+            <td>Controls data duplication</td>
+        </tr>
+    </table>
+    
+    <div class="simple-explanation">
+        File system is like keeping your notes in different notebooks scattered around your room. DBMS is like having one organized digital notebook (like Notion) where everything is searchable and backed up!
+    </div>
+
+    <div class="page-break"></div>
+
+    <div class="section-header">DBMS Architecture - The Complete Picture</div>
+
+    <div class="no-break">
+        <h4>Data Abstraction Levels</h4>
+        <strong>Three-Tier Architecture:</strong>
+        <ol>
+            <li><strong>Physical Level</strong> - How data is actually stored (like the actual books in a library)</li>
+            <li><strong>Logical Level</strong> - What data is stored (like the library catalog)</li>
+            <li><strong>View Level</strong> - What users see (like the user-friendly search interface)</li>
+        </ol>
+    </div>
+
+    <div class="example-box">
+        <strong>Real Example in IRCTC:</strong>
+        <ul>
+            <li><strong>View Level:</strong> The booking page you see</li>
+            <li><strong>Logical Level:</strong> All trains, routes, seat availability data</li>
+            <li><strong>Physical Level:</strong> Servers storing this data in Mumbai, Delhi data centers</li>
+        </ul>
+    </div>
+
+    <div class="section-header">Two-Tier and Three-Tier Database Architecture</div>
+
+    <div class="no-break">
+        <h4>Two-Tier Architecture (2-Tier)</h4>
+        <div class="exam-definition">
+            In two-tier architecture, the application (client) communicates directly with the database (server). The client sends SQL queries to the database and gets back results, with NO extra layer in between.
+        </div>
+        <div class="simple-explanation">
+            Think of it like ordering food via a phone call directly to the restaurant. You (client) call the restaurant (server) and order food. The restaurant cooks and gives you the dish.
+        </div>
+        <div class="example-box">
+            Small desktop apps where the user and database are on the same local network, Old banking software running on office PCs
+        </div>
+    </div>
+
+    <div class="no-break">
+        <h4>Three-Tier Architecture (3-Tier)</h4>
+        <div class="exam-definition">
+            In three-tier architecture, there's an extra layer—the application server—between the client and the database. The client talks to the application server, which then talks to the database server.
+        </div>
+        <div class="simple-explanation">
+            It's like ordering food on Zomato—You (client) use the Zomato app (application server), which sends orders to the restaurant (database server), and then food is delivered to you!
+        </div>
+        <div class="example-box">
+            Modern web apps (like IRCTC, Amazon) where your browser talks to a web server, which fetches data from backend database servers
+        </div>
+    </div>
+
+    <table>
+        <tr>
+            <th>Layer/Role</th>
+            <th>2-Tier</th>
+            <th>3-Tier</th>
+        </tr>
+        <tr>
+            <td>Client</td>
+            <td>Directly talks to DB server</td>
+            <td>Talks to Application/Business Logic Layer</td>
+        </tr>
+        <tr>
+            <td>Application code</td>
+            <td>Often mixed with user interface</td>
+            <td>In separate server (middle layer)</td>
+        </tr>
+        <tr>
+            <td>Best for</td>
+            <td>Small network apps</td>
+            <td>Large, scalable web/mobile apps</td>
+        </tr>
+    </table>
+
+    <div class="section-header">DBMS Functional Components</div>
+    <ul>
+        <li><strong>Storage Manager:</strong> Handles physical storage and retrieval of data; controls file, buffer, authorization, transaction</li>
+        <li><strong>Query Processor:</strong> Translates, optimizes, and executes queries you write (e.g. SELECT ...)</li>
+    </ul>
+
+    <div class="section-header">Types of DBMS Users</div>
+    <ul>
+        <li><strong>Naive users:</strong> Use application interface (e.g. ATM users, ordering on Zomato)</li>
+        <li><strong>Application Programmers:</strong> Write apps that use the DB</li>
+        <li><strong>Sophisticated users:</strong> Use advanced query tools (analysts)</li>
+        <li><strong>DBA (Database Admin):</strong> Controls permissions, optimizes and secures DB</li>
+    </ul>
+
+    <div class="section-header">Data Independence</div>
+    <div class="exam-definition">
+        <strong>Physical Data Independence:</strong> "Ability to change physical storage without affecting logical structure."<br>
+        <strong>Logical Data Independence:</strong> "Ability to change logical schema without changing user views or application programs."
+    </div>
+
+    <div class="page-break"></div>
+
+    <div class="section-header">Data Models - Different Ways to Think About Data</div>
+    <ol>
+        <li><strong>Hierarchical Model:</strong> Think of it like a family tree - one parent, many children, but each child has only one parent.</li>
+        <li><strong>Network Model:</strong> Like your social media connections - more complex relationships.</li>
+        <li><strong>Relational Model (Most Important!):</strong> Data stored in tables with rows and columns - like Excel sheets that are connected to each other.</li>
+    </ol>
+
+    <div class="section-header">Complete Codd's Rules (All 13 Rules)</div>
+    <p><strong>Dr. E.F. Codd</strong> gave us 13 rules for relational databases. Here are ALL of them:</p>
+
+    <div class="no-break">
+        <div class="exam-definition">
+            <strong>Rule 0: Foundation Rule</strong><br>
+            "For a system to qualify as RDBMS, it must be able to manage databases entirely through its relational capabilities."
+        </div>
+    </div>
+
+    <div class="no-break">
+        <div class="exam-definition">
+            <strong>Rule 1: Information Rule</strong><br>
+            "All information in the database must be represented as values in tables (cells of rows and columns)."
+        </div>
+    </div>
+
+    <div class="no-break">
+        <div class="exam-definition">
+            <strong>Rule 2: Guaranteed Access Rule</strong><br>
+            "Every data value must be accessible using table name, primary key value, and column name."
+        </div>
+    </div>
+
+    <div class="no-break">
+        <div class="exam-definition">
+            <strong>Rule 3: Systematic Treatment of NULL Values</strong><br>
+            "NULL values must be handled uniformly and systematically, independent of data type."
+        </div>
+    </div>
+
+    <div class="no-break">
+        <div class="exam-definition">
+            <strong>Rule 4: Active Online Catalog</strong><br>
+            "Database catalog must be stored online and accessible using the same query language used for data."
+        </div>
+    </div>
+
+    <div class="no-break">
+        <div class="exam-definition">
+            <strong>Rule 5: Comprehensive Data Sublanguage Rule</strong><br>
+            "There must be at least one language that supports data definition, manipulation, and transaction management."
+        </div>
+    </div>
+
+    <div class="no-break">
+        <div class="exam-definition">
+            <strong>Rule 6: View Updating Rule</strong><br>
+            "All views that are theoretically updatable must be updatable by the system."
+        </div>
+    </div>
+
+    <div class="no-break">
+        <div class="exam-definition">
+            <strong>Rule 7: High-level Insert, Update, Delete</strong><br>
+            "The system must support high-level insert, update, and delete operations on sets of data."
+        </div>
+    </div>
+
+    <div class="no-break">
+        <div class="exam-definition">
+            <strong>Rule 8: Physical Data Independence</strong><br>
+            "Changes to physical storage must not affect application programs."
+        </div>
+    </div>
+
+    <div class="no-break">
+        <div class="exam-definition">
+            <strong>Rule 9: Logical Data Independence</strong><br>
+            "Changes to logical structure must not affect application programs."
+        </div>
+    </div>
+
+    <div class="no-break">
+        <div class="exam-definition">
+            <strong>Rule 10: Integrity Independence</strong><br>
+            "Integrity constraints must be stored in catalog and enforced automatically."
+        </div>
+    </div>
+
+    <div class="no-break">
+        <div class="exam-definition">
+            <strong>Rule 11: Distribution Independence</strong><br>
+            "Distribution of data across locations must be invisible to users."
+        </div>
+    </div>
+
+    <div class="no-break">
+        <div class="exam-definition">
+            <strong>Rule 12: Non-Subversion Rule</strong><br>
+            "Low-level access must not bypass security and integrity constraints."
+        </div>
+    </div>
+
+    <div class="market-relevance">
+        RDBMS skills are <strong>EXTREMELY HOT</strong> right now! Companies like Oracle, Microsoft SQL Server dominate the market, and SQL skills are required in 90% of database jobs!
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- UNIT 2 -->
+    <div class="unit-header">🔗 UNIT 2: Relational Data Model</div>
+
+    <div class="section-header">Relational Structure - The Foundation</div>
+
+    <div class="no-break">
+        <h4>Tables/Relations:</h4>
+        <div class="exam-definition">
+            A table is a collection of related data organized in rows and columns.
+        </div>
+        <div class="simple-explanation">
+            Think of a table like your class attendance sheet. Each row is one student, each column is information about that student (roll no, name, attendance).
+        </div>
+    </div>
+
+    <div class="no-break">
+        <strong>Key Terms:</strong>
+        <ul>
+            <li><strong>Tuple/Row:</strong> One complete record (one student's info)</li>
+            <li><strong>Attribute/Column:</strong> One piece of information (like "Name" column)</li>
+            <li><strong>Domain:</strong> Allowed values for an attribute (like marks can only be 0-100)</li>
+        </ul>
+    </div>
+
+    <div class="section-header">Keys - The Complete Guide</div>
+
+    <div class="no-break">
+        <h4>1. Super Key</h4>
+        <div class="exam-definition">
+            "A set of one or more attributes that can uniquely identify any tuple in a relation."
+        </div>
+        <div class="simple-explanation">
+            Like having multiple ways to identify you - your roll number alone, or your name + phone number together.
+        </div>
+        <div class="example-box">
+            In Student(RollNo, Name, Email, Phone), super keys are:
+            <ul>
+                <li>{RollNo}</li>
+                <li>{Email}</li>
+                <li>{RollNo, Name}</li>
+                <li>{Email, Phone}</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="no-break">
+        <h4>2. Candidate Key</h4>
+        <div class="exam-definition">
+            "A minimal super key with no redundant attributes."
+        </div>
+        <div class="example-box">
+            From above super keys, candidate keys are:
+            <ul>
+                <li>{RollNo}</li>
+                <li>{Email}</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="no-break">
+        <h4>3. Primary Key</h4>
+        <div class="exam-definition">
+            "A candidate key chosen to uniquely identify tuples, cannot be NULL."
+        </div>
+        <div class="simple-explanation">
+            Think of Primary Key as your superhero identity number. Spider-Man has only one unique ID in the Marvel universe, just like each student has only one unique roll number.
+        </div>
+        
+        <strong>Rules for Primary Key:</strong>
+        <ul>
+            <li>Must be unique (no duplicates)</li>
+            <li>Cannot be NULL</li>
+            <li>Value should not change</li>
+            <li>Table can have only ONE primary key</li>
+        </ul>
+    </div>
+
+    <div class="no-break">
+        <h4>4. Foreign Key</h4>
+        <div class="exam-definition">
+            "An attribute in one table that refers to the primary key of another table."
+        </div>
+        <div class="example-box">
+            In a college database:
+            <ul>
+                <li>Student table: StudentID (Primary Key), Name, Email</li>
+                <li>Enrollment table: StudentID (Foreign Key), CourseCode, Grade</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section-header">Data Constraints - The Rules</div>
+    <p><strong>Why Constraints?</strong> To maintain data quality and prevent garbage data entry.</p>
+
+    <div class="no-break">
+        <strong>Types of Constraints:</strong>
+
+        <h4>1. NOT NULL Constraint</h4>
+        <div class="code-block">Name VARCHAR(50) NOT NULL</div>
+        <p><strong>Meaning:</strong> This field cannot be empty (like mandatory fields in a form)</p>
+
+        <h4>2. UNIQUE Constraint</h4>
+        <div class="code-block">Email VARCHAR(100) UNIQUE</div>
+        <p><strong>Meaning:</strong> No two records can have the same email</p>
+
+        <h4>3. CHECK Constraint</h4>
+        <div class="code-block">Age INT CHECK(Age >= 18)</div>
+        <p><strong>Meaning:</strong> Age must be 18 or above (like age verification for voting)</p>
+
+        <h4>4. DEFAULT Constraint</h4>
+        <div class="code-block">Country VARCHAR(50) DEFAULT 'India'</div>
+        <p><strong>Meaning:</strong> If no country is specified, automatically set to 'India'</p>
+
+        <h4>5. PRIMARY KEY Constraint</h4>
+        <div class="code-block">StudentID INT PRIMARY KEY</div>
+
+        <h4>6. FOREIGN KEY Constraint</h4>
+        <div class="code-block">FOREIGN KEY (StudentID) REFERENCES Student(StudentID)</div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <div class="section-header">Functional Dependencies - The Logic</div>
+    <div class="exam-definition">
+        If for every value of attribute A, there's exactly one value of attribute B, then B is functionally dependent on A (A → B).
+    </div>
+    <div class="example-box">
+        <ul>
+            <li>StudentID → StudentName (One student ID always maps to one name)</li>
+            <li>StudentID → Email (One student ID always maps to one email)</li>
+            <li>But NOT: StudentName → StudentID (multiple students might have same name)</li>
+        </ul>
+    </div>
+
+    <div class="section-header">Normalization - Data Organization</div>
+    <p><strong>Why Normalize?</strong> To reduce redundancy and maintain data integrity.</p>
+
+    <div class="no-break">
+        <h4>First Normal Form (1NF):</h4>
+        <div class="exam-definition">Each cell should contain only one value (atomic values)</div>
+        
+        <div class="wrong">
+            <table>
+                <tr><th>Student</th><th>Subjects</th></tr>
+                <tr><td>Yash</td><td>Math, Physics, Chemistry</td></tr>
+            </table>
+        </div>
+        
+        <div class="correct">
+            <table>
+                <tr><th>Student</th><th>Subject</th></tr>
+                <tr><td>Yash</td><td>Math</td></tr>
+                <tr><td>Yash</td><td>Physics</td></tr>
+                <tr><td>Yash</td><td>Chemistry</td></tr>
+            </table>
+        </div>
+    </div>
+
+    <div class="no-break">
+        <h4>Second Normal Form (2NF):</h4>
+        <div class="exam-definition">Must be in 1NF + all non-key attributes fully depend on primary key</div>
+    </div>
+
+    <div class="no-break">
+        <h4>Third Normal Form (3NF):</h4>
+        <div class="exam-definition">Must be in 2NF + no transitive dependencies</div>
+        <div class="example-box">
+            Student database:
+            <ul>
+                <li><strong>Before 3NF:</strong> StudentID, Name, DeptID, DeptName, DeptHead</li>
+                <li><strong>After 3NF:</strong>
+                    <ul>
+                        <li>Student(StudentID, Name, DeptID)</li>
+                        <li>Department(DeptID, DeptName, DeptHead)</li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section-header">Entity-Relationship (ER) Model - Complete Guide</div>
+
+    <div class="no-break">
+        <strong>Components:</strong>
+
+        <h4>1. Strong Entity</h4>
+        <p><strong>Symbol:</strong> Rectangle</p>
+        <div class="example-box">Student, Course, Teacher</div>
+
+        <h4>2. Weak Entity</h4>
+        <p><strong>Symbol:</strong> Double Rectangle</p>
+        <div class="example-box">Dependents of employees (can't exist without employee)</div>
+
+        <h4>3. Attributes</h4>
+        <p><strong>Symbol:</strong> Oval</p>
+        <strong>Types:</strong>
+        <ul>
+            <li><strong>Key Attribute:</strong> Underlined oval (Primary Key)</li>
+            <li><strong>Composite Attribute:</strong> Multiple ovals connected to main oval</li>
+            <li><strong>Multi-valued Attribute:</strong> Double oval</li>
+            <li><strong>Derived Attribute:</strong> Dashed oval</li>
+        </ul>
+
+        <h4>4. Relationships</h4>
+        <p><strong>Symbol:</strong> Diamond</p>
+    </div>
+
+    <div class="no-break">
+        <strong>Cardinality Types:</strong>
+        <ul>
+            <li><strong>One-to-One (1:1):</strong> One student has one ID card</li>
+            <li><strong>One-to-Many (1:M):</strong> One teacher teaches many students</li>
+            <li><strong>Many-to-Many (M:N):</strong> Many students enrolled in many courses</li>
+        </ul>
+
+        <strong>Cardinality Notations:</strong>
+        <ul>
+            <li><strong>One-to-One (1:1):</strong> Single line with 1 on both sides</li>
+            <li><strong>One-to-Many (1:M):</strong> Single line on one side, crow's foot on other</li>
+            <li><strong>Many-to-Many (M:N):</strong> Crow's foot on both sides</li>
+        </ul>
+    </div>
+
+    <div class="section-header">Library Management System Database Design</div>
+    <p>(From Your Question Paper)</p>
+
+    <div class="no-break">
+        <strong>Entities for Library System:</strong>
+        <ol>
+            <li><strong>Book</strong> (BookID, Title, ISBN, Publisher, PublicationYear)</li>
+            <li><strong>Author</strong> (AuthorID, FirstName, LastName, Biography)</li>
+            <li><strong>Member</strong> (MemberID, Name, Address, Phone, Email, JoinDate)</li>
+            <li><strong>Category</strong> (CategoryID, CategoryName, Description)</li>
+            <li><strong>Staff</strong> (StaffID, Name, Position, Salary)</li>
+            <li><strong>Issue</strong> (IssueID, BookID, MemberID, IssueDate, ReturnDate, Status)</li>
+        </ol>
+    </div>
+
+    <div class="no-break">
+        <strong>Relationships:</strong>
+        <ul>
+            <li>Book <strong>WRITTEN_BY</strong> Author (M:N)</li>
+            <li>Book <strong>BELONGS_TO</strong> Category (M:1)</li>
+            <li>Member <strong>BORROWS</strong> Book (M:N through Issue)</li>
+            <li>Staff <strong>MANAGES</strong> Issue (1:M)</li>
+        </ul>
+    </div>
+
+    <div class="market-relevance">
+        Database design skills are <strong>CRITICAL</strong>! Every app, website, or system needs proper database design. Companies specifically look for normalization and ER modeling skills in interviews!
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- UNIT 3 -->
+    <div class="unit-header">💻 UNIT 3: SQL and NoSQL</div>
+
+    <div class="section-header">SQL - Structured Query Language</div>
+    <div class="exam-definition">
+        SQL is a standard language used to interact with relational databases for creating, retrieving, updating, and managing data.
+    </div>
+    <div class="simple-explanation">
+        SQL is like English for talking to databases! Instead of "Please show me all students," you write "SELECT * FROM Students."
+    </div>
+
+    <div class="section-header">Components of SQL</div>
+
+    <div class="no-break">
+        <h4>1. DDL (Data Definition Language)</h4>
+        <p><strong>Purpose:</strong> Define database structure</p>
+        <strong>Commands:</strong>
+        <ul>
+            <li><code>CREATE</code> - Make new tables/databases</li>
+            <li><code>ALTER</code> - Modify table structure</li>
+            <li><code>DROP</code> - Delete tables/databases</li>
+            <li><code>TRUNCATE</code> - Remove all data but keep structure</li>
+        </ul>
+    </div>
+
+    <div class="no-break">
+        <h4>2. DML (Data Manipulation Language)</h4>
+        <p><strong>Purpose:</strong> Manipulate data</p>
+        <strong>Commands:</strong>
+        <ul>
+            <li><code>INSERT</code> - Add new records</li>
+            <li><code>UPDATE</code> - Modify existing data</li>
+            <li><code>DELETE</code> - Remove records</li>
+            <li><code>SELECT</code> - Retrieve data</li>
+        </ul>
+    </div>
+
+    <div class="no-break">
+        <h4>3. DCL (Data Control Language)</h4>
+        <p><strong>Purpose:</strong> Control access permissions</p>
+        <strong>Commands:</strong>
+        <ul>
+            <li><code>GRANT</code> - Give permissions</li>
+            <li><code>REVOKE</code> - Remove permissions</li>
+        </ul>
+    </div>
+
+    <div class="no-break">
+        <h4>4. TCL (Transaction Control Language)</h4>
+        <p><strong>Purpose:</strong> Manage transactions</p>
+        <strong>Commands:</strong>
+        <ul>
+            <li><code>COMMIT</code> - Save changes permanently</li>
+            <li><code>ROLLBACK</code> - Undo changes</li>
+            <li><code>SAVEPOINT</code> - Create checkpoint</li>
+        </ul>
+    </div>
+
+    <div class="section-header">Complete SQL Data Types</div>
+
+    <div class="no-break">
+        <strong>Numeric Types:</strong>
+        <ul>
+            <li><code>TINYINT</code> - Very small integers (0 to 255)</li>
+            <li><code>SMALLINT</code> - Small integers (-32,768 to 32,767)</li>
+            <li><code>INT</code> - Standard integers</li>
+            <li><code>BIGINT</code> - Large integers</li>
+            <li><code>DECIMAL(p,d)</code> - Fixed-point numbers</li>
+            <li><code>FLOAT</code> - Floating-point numbers</li>
+        </ul>
+    </div>
+
+    <div class="no-break">
+        <strong>String Types:</strong>
+        <ul>
+            <li><code>CHAR(n)</code> - Fixed-length strings</li>
+            <li><code>VARCHAR(n)</code> - Variable-length strings</li>
+            <li><code>TEXT</code> - Large text data</li>
+        </ul>
+    </div>
+
+    <div class="no-break">
+        <strong>Date/Time Types:</strong>
+        <ul>
+            <li><code>DATE</code> - Date values (YYYY-MM-DD)</li>
+            <li><code>TIME</code> - Time values (HH:MM:SS)</li>
+            <li><code>DATETIME</code> - Date and time together</li>
+        </ul>
+    </div>
+
+    <div class="section-header">Basic SQL Structure</div>
+    <div class="code-block">
+SELECT column1, column2
+FROM table_name
+WHERE condition
+GROUP BY column
+HAVING condition
+ORDER BY column;
+    </div>
+
+    <div class="section-header">SQL Clauses</div>
+
+    <div class="no-break">
+        <h4>SELECT Clause:</h4>
+        <div class="code-block">
+SELECT Name, Marks FROM Students;
+SELECT * FROM Students;  -- All columns
+        </div>
+    </div>
+
+    <div class="no-break">
+        <h4>WHERE Clause:</h4>
+        <div class="code-block">
+SELECT * FROM Students WHERE Marks > 80;
+SELECT * FROM Students WHERE Name = 'Yash' AND Marks > 75;
+        </div>
+    </div>
+
+    <div class="no-break">
+        <h4>GROUP BY Clause:</h4>
+        <div class="code-block">
+SELECT Department, COUNT(*) FROM Students GROUP BY Department;
+        </div>
+    </div>
+
+    <div class="no-break">
+        <h4>HAVING Clause:</h4>
+        <div class="code-block">
+SELECT Department, COUNT(*) FROM Students 
+GROUP BY Department 
+HAVING COUNT(*) > 5;
+        </div>
+    </div>
+
+    <div class="no-break">
+        <h4>ORDER BY Clause:</h4>
+        <div class="code-block">
+SELECT * FROM Students ORDER BY Marks DESC;
+SELECT * FROM Students ORDER BY Name ASC;
+        </div>
+    </div>
+
+    <div class="section-header">Relational Operators</div>
+    <p>(From Your Exam Paper)</p>
+
+    <div class="no-break">
+        <strong>Complete List:</strong>
+        <ul>
+            <li><strong>= (Equal to):</strong> Checks if two values are the same</li>
+            <li><strong>&lt;&gt; or != (Not equal):</strong> Checks if values are different</li>
+            <li><strong>&gt; (Greater than):</strong> Left value greater than right value</li>
+            <li><strong>&lt; (Less than):</strong> Left value less than right value</li>
+            <li><strong>&gt;= (Greater than or equal):</strong> Left value ≥ right value</li>
+            <li><strong>&lt;= (Less than or equal):</strong> Left value ≤ right value</li>
+        </ul>
+    </div>
+
+    <div class="example-box">
+        <div class="code-block">
+SELECT * FROM Student WHERE Marks > 80;
+SELECT * FROM Student WHERE Age >= 18;
+        </div>
+    </div>
+
+    <div class="page-break"></div>
+
+    <div class="section-header">SQL Joins - Connecting Tables</div>
+
+    <div class="no-break">
+        <h4>INNER JOIN:</h4>
+        <div class="code-block">
+SELECT Students.Name, Courses.CourseName
+FROM Students 
+INNER JOIN Enrollment ON Students.ID = Enrollment.StudentID
+INNER JOIN Courses ON Enrollment.CourseID = Courses.ID;
+        </div>
+        <div class="simple-explanation">
+            INNER JOIN is like finding common friends between you and someone else on Facebook - only shows people who are friends with both of you!
+        </div>
+    </div>
+
+    <div class="no-break">
+        <strong>Types of Joins:</strong>
+        <ul>
+            <li><strong>LEFT JOIN:</strong> All records from left table + matching from right</li>
+            <li><strong>RIGHT JOIN:</strong> All records from right table + matching from left</li>
+            <li><strong>FULL JOIN:</strong> All records from both tables</li>
+        </ul>
+    </div>
+
+    <div class="section-header">SQL Functions</div>
+
+    <div class="no-break">
+        <strong>Aggregate Functions:</strong>
+        <ul>
+            <li><code>COUNT()</code> - Count rows</li>
+            <li><code>SUM()</code> - Add up values</li>
+            <li><code>AVG()</code> - Calculate average</li>
+            <li><code>MAX()</code> - Find maximum</li>
+            <li><code>MIN()</code> - Find minimum</li>
+        </ul>
+    </div>
+
+    <div class="no-break">
+        <strong>String Functions:</strong>
+        <ul>
+            <li><code>UPPER()</code> - Convert to uppercase</li>
+            <li><code>LOWER()</code> - Convert to lowercase</li>
+            <li><code>SUBSTR()</code> - Extract substring</li>
+            <li><code>LENGTH()</code> - Find string length</li>
+        </ul>
+    </div>
+
+    <div class="no-break">
+        <strong>Date Functions:</strong>
+        <ul>
+            <li><code>NOW()</code> - Current date/time</li>
+            <li><code>DATEADD()</code> - Add days/months to date</li>
+            <li><code>DATEDIFF()</code> - Difference between dates</li>
+        </ul>
+    </div>
+
+    <div class="section-header">Relational Algebra Operations</div>
+    <div class="no-break">
+        <strong>Basic Operations:</strong>
+        <ol>
+            <li><strong>Selection (σ):</strong> Selects rows based on condition</li>
+            <li><strong>Projection (π):</strong> Selects specific columns</li>
+            <li><strong>Union (∪):</strong> Combines two relations</li>
+            <li><strong>Set Difference (-):</strong> Rows in first but not second relation</li>
+            <li><strong>Cartesian Product (×):</strong> All combinations of rows</li>
+            <li><strong>Rename (ρ):</strong> Renames attributes or relations</li>
+        </ol>
+    </div>
+
+    <div class="section-header">NoSQL - Not Only SQL</div>
+
+    <div class="no-break">
+        <strong>Why NoSQL?</strong><br>
+        Traditional SQL databases struggle with:
+        <ul>
+            <li><strong>Big Data</strong> - Massive volumes of data</li>
+            <li><strong>Variety</strong> - Different data formats (text, images, videos)</li>
+            <li><strong>Velocity</strong> - High-speed data processing</li>
+            <li><strong>Flexibility</strong> - Changing data requirements</li>
+        </ul>
+    </div>
+
+    <div class="section-header">Types of NoSQL Databases</div>
+
+    <div class="no-break">
+        <h4>1. Document Databases</h4>
+        <p><strong>Example:</strong> MongoDB</p>
+        <p><strong>Use Case:</strong> Content management, catalogs</p>
+        <p><strong>Structure:</strong> Stores data as documents (like JSON files)</p>
+    </div>
+
+    <div class="no-break">
+        <h4>2. Key-Value Stores</h4>
+        <p><strong>Example:</strong> Redis, DynamoDB</p>
+        <p><strong>Use Case:</strong> Caching, session management</p>
+        <p><strong>Structure:</strong> Simple key-value pairs</p>
+    </div>
+
+    <div class="no-break">
+        <h4>3. Column-Family</h4>
+        <p><strong>Example:</strong> Cassandra</p>
+        <p><strong>Use Case:</strong> Time-series data, IoT data</p>
+        <p><strong>Structure:</strong> Data stored in column families</p>
+    </div>
+
+    <div class="no-break">
+        <h4>4. Graph Databases</h4>
+        <p><strong>Example:</strong> Neo4j</p>
+        <p><strong>Use Case:</strong> Social networks, recommendation engines</p>
+        <p><strong>Structure:</strong> Nodes and relationships</p>
+    </div>
+
+    <div class="section-header">SQL vs NoSQL Comparison</div>
+    <table>
+        <tr>
+            <th>SQL</th>
+            <th>NoSQL</th>
+        </tr>
+        <tr>
+            <td>Fixed schema</td>
+            <td>Flexible schema</td>
+        </tr>
+        <tr>
+            <td>ACID properties</td>
+            <td>BASE properties</td>
+        </tr>
+        <tr>
+            <td>Vertical scaling</td>
+            <td>Horizontal scaling</td>
+        </tr>
+        <tr>
+            <td>Complex queries</td>
+            <td>Simple queries</td>
+        </tr>
+        <tr>
+            <td>Best for: Banking, ERP</td>
+            <td>Best for: Big data, real-time web</td>
+        </tr>
+    </table>
+
+    <div class="section-header">Real-World Examples</div>
+
+    <div class="no-break">
+        <strong>SQL Use Cases:</strong>
+        <ul>
+            <li><strong>Banking Systems:</strong> Transaction processing, account management</li>
+            <li><strong>ERP Systems:</strong> Inventory, HR, finance management</li>
+            <li><strong>E-commerce:</strong> Order processing, payment systems</li>
+        </ul>
+    </div>
+
+    <div class="no-break">
+        <strong>NoSQL Use Cases:</strong>
+        <ul>
+            <li><strong>Social Media:</strong> Facebook posts, Instagram photos</li>
+            <li><strong>IoT Applications:</strong> Sensor data from smart devices</li>
+            <li><strong>Gaming:</strong> Real-time player data, leaderboards</li>
+            <li><strong>Content Management:</strong> Netflix movie catalog, YouTube videos</li>
+        </ul>
+    </div>
+
+    <div class="market-relevance">
+        <strong>Market Relevance - SUPER HOT! 🔥</strong><br><br>
+        <strong>SQL Market:</strong>
+        <ul>
+            <li>Traditional RDBMS market: $239.70 billion</li>
+            <li>90% of database jobs require SQL skills</li>
+            <li>Average salary: $89,579 for SQL developers</li>
+        </ul>
+        
+        <strong>NoSQL Market:</strong>
+        <ul>
+            <li>NoSQL market: Growing at 29.5% CAGR</li>
+            <li>Expected to reach $81.9 billion by 2033</li>
+            <li>Companies like MongoDB, Cassandra leading</li>
+            <li>Perfect for Big Data and AI applications</li>
+        </ul>
+        
+        <strong>Career Impact:</strong><br>
+        Both SQL and NoSQL skills are <strong>ESSENTIAL</strong> in today's market! Companies want professionals who can work with both:
+        <ul>
+            <li><strong>Startups:</strong> Heavy NoSQL usage for scalability</li>
+            <li><strong>Enterprises:</strong> SQL for critical operations</li>
+            <li><strong>Big Tech:</strong> Hybrid approaches using both</li>
+        </ul>
+    </div>
+
+    <div class="page-break"></div>
+
+    <!-- Study Strategy Section -->
+    <div class="unit-header">🎯 Updated Study Strategy Based on Your Question Paper</div>
+
+    <div class="study-tips">
+        <h3>High Priority for Your Exam:</h3>
+        <ol>
+            <li><strong>Codd's Rules</strong> - Learn all 13 rules by heart</li>
+            <li><strong>ER Diagram drawing</strong> - Practice Library, Hospital, School systems</li>
+            <li><strong>Keys</strong> - Know differences between all types (Super, Candidate, Primary, Foreign)</li>
+            <li><strong>SQL basics</strong> - Data types, operators, constraints</li>
+            <li><strong>Database design</strong> - Normalization up to 3NF</li>
+            <li><strong>Architecture</strong> - 2-tier vs 3-tier differences</li>
+        </ol>
+    </div>
+
+    <div class="study-tips">
+        <h3>Medium Priority:</h3>
+        <ol>
+            <li><strong>DBMS vs File System</strong> - Know 4-5 differences</li>
+            <li><strong>Data models</strong> - Hierarchical, Network, Relational</li>
+            <li><strong>Functional Dependencies</strong> - Understanding and examples</li>
+            <li><strong>SQL Joins</strong> - INNER, LEFT, RIGHT, FULL</li>
+        </ol>
+    </div>
+
+    <div class="study-tips">
+        <h3>Quick Revision Points for Your Exam:</h3>
+        <ul>
+            <li>Codd gave 13 rules (0-12) for RDBMS</li>
+            <li>Super key may have extra attributes, candidate key is minimal</li>
+            <li>Foreign key creates relationship between tables</li>
+            <li>1NF = atomic values, 2NF = no partial dependency, 3NF = no transitive dependency</li>
+            <li>ER diagram: Rectangle=Entity, Diamond=Relationship, Oval=Attribute</li>
+            <li>2-tier = direct client-server, 3-tier = client-application server-database server</li>
+        </ul>
+    </div>
+
+    <div class="section-header">Why This Topic is CRUCIAL for You</div>
+    <ol>
+        <li><strong>Industry Demand:</strong> 874 database jobs available on LinkedIn in the US alone!</li>
+        <li><strong>Salary Potential:</strong> Database professionals earn $84,950-$107,224 annually</li>
+        <li><strong>Future-Proof:</strong> With AI and Big Data growth, database skills become more valuable</li>
+        <li><strong>Versatility:</strong> Works across all industries - healthcare, finance, gaming, e-commerce</li>
+    </ol>
+
+    <div class="study-tips">
+        <h3>Study Tips for Exams:</h3>
+        
+        <strong>For Theory Questions:</strong>
+        <ul>
+            <li>Remember the exact definitions provided</li>
+            <li>Practice drawing ER diagrams</li>
+            <li>Understand normalization with examples</li>
+            <li>Know the differences between SQL and NoSQL</li>
+            <li>Memorize all 13 Codd's rules</li>
+        </ul>
+        
+        <strong>For Practical Questions:</strong>
+        <ul>
+            <li>Practice basic SQL queries daily</li>
+            <li>Understand JOIN operations clearly</li>
+            <li>Know how to create tables with constraints</li>
+            <li>Practice normalization problems</li>
+            <li>Draw ER diagrams for different scenarios</li>
+        </ul>
+    </div>
+
+    <div class="final-section">
+        <h2>💪 Final Words</h2>
+        <p>Yash, this DBMS knowledge is going to be your <strong>secret weapon</strong> in the job market! The database field is literally exploding with opportunities, and you're learning exactly the right skills at the right time.</p>
+        
+        <h3>Career Impact: Mastering these topics can land you roles like:</h3>
+        <ul>
+            <li><strong>Database Developer:</strong> ₹4-8 LPA</li>
+            <li><strong>System Analyst:</strong> ₹6-12 LPA</li>
+            <li><strong>Database Administrator:</strong> ₹8-15 LPA</li>
+        </ul>
+        
+        <h3>Remember:</h3>
+        <ul>
+            <li><strong>Practice SQL daily</strong> - even 15 minutes helps</li>
+            <li><strong>Think in real-world examples</strong> - it makes concepts stick</li>
+            <li><strong>Draw ER diagrams for everything</strong> - your college, your favorite app, anything!</li>
+            <li><strong>Stay curious about new database technologies</strong> - the field evolves fast</li>
+        </ul>
+        
+        <p>You've got this, buddy! Database mastery is your ticket to that 90%+ score and an amazing tech career! 🚀</p>
+        
+        <p>Keep grinding, and remember - every query you write today is building your future!</p>
+        
+        <p><strong>Perfect! Now your study guide covers EVERYTHING from your question paper AND the missing architecture topics. You're fully prepared to score 90%+ in your DBMS exam!</strong> 🚀</p>
+        
+        <p><em>Now go practice some SQL and make those databases dance to your commands!</em> 😎</p>
+    </div>
+
+    <div class="study-tips">
+        <h3>References:</h3>
+        <ul>
+            <li>DBMS_Unit1_A.pdf - Introduction to Database Systems</li>
+            <li>DBMS_Unit_1_B.pdf - Database Architecture and Rules</li>
+            <li>DBMS_UNIT-3_A.pdf - SQL and NoSQL Concepts</li>
+            <li>313302-DATABASE-MANAGEMENT-SYSTEM.pdf - MSBTE Curriculum</li>
+            <li>DBMS_UNIT-2.pdf - Relational Data Model</li>
+            <li>Web research on current market trends and opportunities</li>
+            <li>Government Polytechnic Awasari Question Paper Analysis</li>
+        </ul>
+    </div>
+
+</body>
+</html>
