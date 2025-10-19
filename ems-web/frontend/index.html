@@ -1,0 +1,151 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+  <link href="css/style.css" rel="stylesheet">
+  <title>EMS DMS</title>
+</head>
+<body class="bg-light" data-bs-theme="light">
+  <nav class="navbar navbar-dark bg-primary fixed-top shadow-sm">
+    <div class="container-fluid">
+      <span class="navbar-brand fw-semibold">EMS DMS</span>
+      <div class="d-flex align-items-center gap-3">
+        <div class="form-check form-switch text-white m-0">
+          <input class="form-check-input" type="checkbox" role="switch" id="darkModeToggle">
+          <label class="form-check-label" for="darkModeToggle">Dark</label>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <main class="container-xl main-content">
+    <section id="statsRow" class="row g-3 mb-4">
+      <div class="col-sm-6 col-lg-3">
+        <div class="card stat-card text-center">
+          <div class="card-body">
+            <p class="text-muted mb-1">Total Employees</p>
+            <h4 id="totalEmployees" class="mb-0">0</h4>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <div class="card stat-card text-center">
+          <div class="card-body">
+            <p class="text-muted mb-1">Average Salary</p>
+            <h4 id="averageSalary" class="mb-0">—</h4>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <div class="card stat-card text-center">
+          <div class="card-body">
+            <p class="text-muted mb-1">Departments</p>
+            <h4 id="departmentCount" class="mb-0">0</h4>
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-6 col-lg-3">
+        <div class="card stat-card text-center">
+          <div class="card-body">
+            <p class="text-muted mb-1">Last Updated</p>
+            <h4 id="lastUpdated" class="mb-0">—</h4>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="d-flex flex-column flex-md-row align-items-md-center justify-content-between gap-3 mb-3">
+      <div class="input-group search-group">
+        <span class="input-group-text"><i class="bi bi-search"></i></span>
+        <input type="search" class="form-control" id="searchInput" placeholder="Search by name, department, or job title" aria-label="Search employees">
+      </div>
+      <div class="d-flex gap-2">
+        <button class="btn btn-outline-secondary" id="resetFilters"><i class="bi bi-arrow-counterclockwise me-1"></i>Reset</button>
+        <button class="btn btn-success" id="openAddModal" data-bs-toggle="modal" data-bs-target="#addModal"><i class="bi bi-plus-lg me-1"></i>Add Employee</button>
+      </div>
+    </div>
+    <div id="statusAlert" class="alert d-none" role="alert"></div>
+    <div class="card">
+      <div class="card-body">
+        <div id="loadingState" class="text-center py-5 d-none">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+        <div id="emptyState" class="text-center text-muted py-4 d-none">No employees found yet.</div>
+        <div class="table-responsive">
+          <table class="table table-striped table-hover align-middle" id="empTable">
+            <thead>
+              <tr>
+                <th scope="col" data-sort="emp_id" class="sortable">ID <i class="bi bi-arrow-down-up sort-icon"></i></th>
+                <th scope="col" data-sort="name" class="sortable">Name <i class="bi bi-arrow-down-up sort-icon"></i></th>
+                <th scope="col" data-sort="dept_name" class="sortable">Department <i class="bi bi-arrow-down-up sort-icon"></i></th>
+                <th scope="col" data-sort="job_title" class="sortable">Job Title <i class="bi bi-arrow-down-up sort-icon"></i></th>
+                <th scope="col" data-sort="salary" class="text-end sortable">Salary <i class="bi bi-arrow-down-up sort-icon"></i></th>
+                <th scope="col" class="text-center">Actions</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Add Modal (Bootstrap) -->
+  <div class="modal fade" id="addModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalTitle">Add Employee</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form id="addForm" novalidate>
+            <input type="hidden" name="emp_id" id="empIdField">
+            <div class="mb-3">
+              <label for="firstName" class="form-label">First name</label>
+              <input class="form-control" name="first_name" id="firstName" required>
+              <div class="invalid-feedback">First name is required.</div>
+            </div>
+            <div class="mb-3">
+              <label for="lastName" class="form-label">Last name</label>
+              <input class="form-control" name="last_name" id="lastName" required>
+              <div class="invalid-feedback">Last name is required.</div>
+            </div>
+            <div class="mb-3">
+              <label for="email" class="form-label">Email</label>
+              <input class="form-control" name="email" id="email" type="email" placeholder="name@example.com">
+              <div class="form-text">Optional – will validate format before saving.</div>
+            </div>
+            <div class="mb-3">
+              <label for="department" class="form-label">Department</label>
+              <input class="form-control" name="dept_name" id="department" placeholder="e.g. Engineering">
+            </div>
+            <div class="mb-3">
+              <label for="jobTitle" class="form-label">Job title</label>
+              <input class="form-control" name="job_title" id="jobTitle" placeholder="e.g. Senior Developer">
+            </div>
+            <div class="mb-3">
+              <label for="salary" class="form-label">Salary</label>
+              <input class="form-control" name="salary" id="salary" type="number" min="0" step="0.01" placeholder="80,000">
+              <div class="invalid-feedback d-block" id="salaryError"></div>
+            </div>
+            <div class="d-flex justify-content-end gap-2">
+              <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancel</button>
+              <button class="btn btn-primary" type="submit" id="submitEmployee"><i class="bi bi-save me-1"></i>Save</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
