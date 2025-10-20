@@ -9,7 +9,12 @@ const pool = mysql.createPool({
   database: process.env.DB_NAME,
   waitForConnections: true,
   connectionLimit: 10,
-  ssl: process.env.DB_SSL === 'REQUIRED' ? 'REQUIRED' : (process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : null),
+  ssl: process.env.DB_SSL === 'REQUIRED' ? {
+    rejectUnauthorized: false,
+    ca: process.env.DB_CA,
+    cert: process.env.DB_CERT,
+    key: process.env.DB_KEY
+  } : (process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : null),
 });
 
 module.exports = pool;
