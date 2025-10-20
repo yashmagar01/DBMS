@@ -7,14 +7,37 @@ const pool = mysql.createPool({
   user: process.env.DB_USER,
   password: process.env.DB_PASS,
   database: process.env.DB_NAME,
+  port: parseInt(process.env.DB_PORT) || 28805,
   waitForConnections: true,
-  connectionLimit: 10,
-  ssl: process.env.DB_SSL === 'REQUIRED' ? {
-    rejectUnauthorized: false,
-    ca: process.env.DB_CA,
-    cert: process.env.DB_CERT,
-    key: process.env.DB_KEY
-  } : (process.env.DB_SSL === 'true' ? { rejectUnauthorized: false } : null),
+  connectionLimit: 5,
+  queueLimit: 0,
+  acquireTimeout: 60000,
+  timeout: 60000,
+  reconnect: true,
+  ssl: process.env.DB_SSL === 'true' ? {
+    rejectUnauthorized: false
+  } : null,
 });
 
-module.exports = pool;
+// Test database connection
+async function testConnection() {
+  try {
+    const connection = await pool.getConnection();
+    await connection.query('SELECT 1');
+    connection.release();
+    console.log('✅ Database connection successful');
+    return true;
+  } catch (error) {
+    console.error('❌ Database connection failed:', error.message);
+    return false;
+  }
+}
+
+// Graceful shutdown
+process.on('SIGINT', async () => {
+  console.log('Closing database pool...');
+  await pool.end();
+  process.exit(0);
+});
+
+module.exports = { pool, testConnection };

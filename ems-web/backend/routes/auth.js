@@ -1,7 +1,7 @@
 // backend/routes/auth.js
 const express = require('express');
 const bcrypt = require('bcryptjs');
-const pool = require('../db');
+const { pool } = require('../db');
 const { generateToken } = require('../utils/authMiddleware');
 
 const router = express.Router();
