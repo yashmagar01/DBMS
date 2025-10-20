@@ -1,8 +1,11 @@
-const API = 'http://localhost:3000/api/employees';
+const API = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+  ? 'http://localhost:3000/api/employees'
+  : 'https://your-backend-domain.onrender.com/api/employees';
 
 let employeesData = [];
 let filteredData = [];
 let sortState = { column: null, ascending: true };
+let currentUser = null;
 
 const elements = {
   tbody: document.querySelector('#empTable tbody'),
@@ -20,21 +23,67 @@ const elements = {
   toastContainer: document.getElementById('toastContainer'),
 };
 
+// Authentication helpers
+function getAuthToken() {
+  return localStorage.getItem('token');
+}
+
+function getCurrentUser() {
+  const userStr = localStorage.getItem('user');
+  return userStr ? JSON.parse(userStr) : null;
+}
+
+function isAuthenticated() {
+  return !!getAuthToken() && !!getCurrentUser();
+}
+
+function logout() {
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  window.location.href = 'login.html';
+}
+
+// API request with auth
+async function apiRequest(url, options = {}) {
+  const token = getAuthToken();
+  if (token) {
+    options.headers = {
+      ...options.headers,
+      'Authorization': `Bearer ${token}`,
+      'Content-Type': 'application/json'
+    };
+  }
+
+  const response = await fetch(url, options);
+
+  // Handle 401 - token expired or invalid
+  if (response.status === 401) {
+    logout();
+    return;
+  }
+
+  return response;
+}
+
 // Dark mode toggle
 function initDarkMode() {
   const savedTheme = localStorage.getItem('theme') || 'light';
   document.body.setAttribute('data-bs-theme', savedTheme);
-  elements.darkModeToggle.checked = savedTheme === 'dark';
+  if (elements.darkModeToggle) {
+    elements.darkModeToggle.checked = savedTheme === 'dark';
 
-  elements.darkModeToggle.addEventListener('change', (e) => {
-    const theme = e.target.checked ? 'dark' : 'light';
-    document.body.setAttribute('data-bs-theme', theme);
-    localStorage.setItem('theme', theme);
-  });
+    elements.darkModeToggle.addEventListener('change', (e) => {
+      const theme = e.target.checked ? 'dark' : 'light';
+      document.body.setAttribute('data-bs-theme', theme);
+      localStorage.setItem('theme', theme);
+    });
+  }
 }
 
 // Toast notifications
 function showToast(type, message) {
+  if (!elements.toastContainer) return;
+
   const toastId = `toast-${Date.now()}`;
   const bgClass = type === 'success' ? 'bg-success' : type === 'danger' ? 'bg-danger' : 'bg-warning';
   const toastHTML = `
@@ -53,17 +102,29 @@ function showToast(type, message) {
 }
 
 function toggleLoading(isLoading) {
-  elements.loadingState.classList.toggle('d-none', !isLoading);
-  document.getElementById('empTable').classList.toggle('d-none', isLoading);
-  elements.emptyState.classList.add('d-none');
+  if (elements.loadingState) {
+    elements.loadingState.classList.toggle('d-none', !isLoading);
+  }
+  if (document.getElementById('empTable')) {
+    document.getElementById('empTable').classList.toggle('d-none', isLoading);
+  }
+  if (elements.emptyState) {
+    elements.emptyState.classList.add('d-none');
+  }
 }
 
 function showEmptyState(show) {
-  elements.emptyState.classList.toggle('d-none', !show);
-  document.getElementById('empTable').classList.toggle('d-none', show);
+  if (elements.emptyState) {
+    elements.emptyState.classList.toggle('d-none', !show);
+  }
+  if (document.getElementById('empTable')) {
+    document.getElementById('empTable').classList.toggle('d-none', show);
+  }
 }
 
 function showAlert(type, message) {
+  if (!elements.statusAlert) return;
+
   const alertEl = elements.statusAlert;
   alertEl.className = `alert alert-${type}`;
   alertEl.textContent = message;
@@ -82,6 +143,8 @@ function getDeptBadgeClass(dept) {
 }
 
 function updateStats() {
+  if (!employeesData.length) return;
+
   const total = employeesData.length;
   document.getElementById('totalEmployees').textContent = total;
 
@@ -99,54 +162,61 @@ function updateStats() {
 function renderTable(data = filteredData) {
   if (!data.length) {
     showEmptyState(true);
-    elements.tbody.innerHTML = '';
+    if (elements.tbody) elements.tbody.innerHTML = '';
     return;
   }
   showEmptyState(false);
-  elements.tbody.innerHTML = data
-    .map((r) => {
-      const deptBadge = r.dept_name
-        ? `<span class="badge badge-dept ${getDeptBadgeClass(r.dept_name)}">${r.dept_name}</span>`
-        : '';
-      return `
-        <tr data-emp-id="${r.emp_id}">
-          <td>${r.emp_id ?? ''}</td>
-          <td>${[r.first_name, r.last_name].filter(Boolean).join(' ')}</td>
-          <td>${deptBadge}</td>
-          <td>${r.job_title ?? ''}</td>
-          <td class="text-end salary-cell">${r.salary ? '$' + Number(r.salary).toLocaleString() : ''}</td>
-          <td class="text-center">
-            <div class="action-buttons">
-              <button class="btn btn-sm btn-outline-primary edit-btn" data-id="${r.emp_id}" title="Edit">
-                <i class="bi bi-pencil"></i>
-              </button>
-              <button class="btn btn-sm btn-outline-danger delete-btn" data-id="${r.emp_id}" title="Delete">
-                <i class="bi bi-trash"></i>
-              </button>
-            </div>
-          </td>
-        </tr>
-      `;
-    })
-    .join('');
 
-  // Attach event listeners
-  document.querySelectorAll('.edit-btn').forEach(btn => {
-    btn.addEventListener('click', () => handleEdit(btn.dataset.id));
-  });
-  document.querySelectorAll('.delete-btn').forEach(btn => {
-    btn.addEventListener('click', () => handleDelete(btn.dataset.id));
-  });
+  if (elements.tbody) {
+    elements.tbody.innerHTML = data
+      .map((r) => {
+        const deptBadge = r.dept_name
+          ? `<span class="badge badge-dept ${getDeptBadgeClass(r.dept_name)}">${r.dept_name}</span>`
+          : '';
+        return `
+          <tr data-emp-id="${r.emp_id}">
+            <td>${r.emp_id ?? ''}</td>
+            <td>${[r.first_name, r.last_name].filter(Boolean).join(' ')}</td>
+            <td>${deptBadge}</td>
+            <td>${r.job_title ?? ''}</td>
+            <td class="text-end salary-cell">${r.salary ? '$' + Number(r.salary).toLocaleString() : ''}</td>
+            <td class="text-center">
+              <div class="action-buttons">
+                <button class="btn btn-sm btn-outline-primary edit-btn" data-id="${r.emp_id}" title="Edit">
+                  <i class="bi bi-pencil"></i>
+                </button>
+                <button class="btn btn-sm btn-outline-danger delete-btn" data-id="${r.emp_id}" title="Delete">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      })
+      .join('');
+
+    // Attach event listeners
+    document.querySelectorAll('.edit-btn').forEach(btn => {
+      btn.addEventListener('click', () => handleEdit(btn.dataset.id));
+    });
+    document.querySelectorAll('.delete-btn').forEach(btn => {
+      btn.addEventListener('click', () => handleDelete(btn.dataset.id));
+    });
+  }
 }
 
 async function loadEmployees() {
   try {
     toggleLoading(true);
-    const res = await fetch(API);
-    if (!res.ok) {
-      throw new Error(`Failed to load employees (status ${res.status})`);
+    const response = await apiRequest(API);
+
+    if (!response) return; // User was redirected due to 401
+
+    if (!response.ok) {
+      throw new Error(`Failed to load employees (status ${response.status})`);
     }
-    employeesData = await res.json();
+
+    employeesData = await response.json();
     filteredData = [...employeesData];
     updateStats();
     renderTable();
@@ -155,7 +225,7 @@ async function loadEmployees() {
     showAlert('danger', err.message || 'Unable to load employees.');
     employeesData = [];
     filteredData = [];
-    elements.tbody.innerHTML = '';
+    if (elements.tbody) elements.tbody.innerHTML = '';
     showEmptyState(true);
   } finally {
     toggleLoading(false);
@@ -163,7 +233,7 @@ async function loadEmployees() {
 }
 
 function handleSearch() {
-  const query = elements.searchInput.value.toLowerCase().trim();
+  const query = elements.searchInput ? elements.searchInput.value.toLowerCase().trim() : '';
   if (!query) {
     filteredData = [...employeesData];
   } else {
@@ -209,24 +279,29 @@ function handleSort(column) {
 }
 
 function resetModal() {
-  elements.modalTitle.textContent = 'Add Employee';
-  elements.empIdField.value = '';
-  elements.addForm.reset();
-  elements.addForm.classList.remove('was-validated');
+  if (elements.modalTitle) elements.modalTitle.textContent = 'Add Employee';
+  if (elements.empIdField) elements.empIdField.value = '';
+  if (elements.addForm) {
+    elements.addForm.reset();
+    elements.addForm.classList.remove('was-validated');
+  }
 }
 
 function handleEdit(empId) {
   const emp = employeesData.find(e => e.emp_id == empId);
   if (!emp) return;
 
-  elements.modalTitle.textContent = 'Edit Employee';
-  elements.empIdField.value = emp.emp_id;
-  document.getElementById('firstName').value = emp.first_name || '';
-  document.getElementById('lastName').value = emp.last_name || '';
-  document.getElementById('email').value = emp.email || '';
-  document.getElementById('department').value = emp.dept_name || '';
-  document.getElementById('jobTitle').value = emp.job_title || '';
-  document.getElementById('salary').value = emp.salary || '';
+  if (elements.modalTitle) elements.modalTitle.textContent = 'Edit Employee';
+  if (elements.empIdField) elements.empIdField.value = emp.emp_id;
+
+  const formFields = ['firstName', 'lastName', 'email', 'department', 'jobTitle', 'salary'];
+  formFields.forEach(field => {
+    const element = document.getElementById(field);
+    if (element) {
+      const value = emp[field.toLowerCase()] || (field === 'firstName' ? emp.first_name : '') || (field === 'lastName' ? emp.last_name : '') || '';
+      element.value = value;
+    }
+  });
 
   const modal = new bootstrap.Modal(elements.addModal);
   modal.show();
@@ -236,8 +311,11 @@ async function handleDelete(empId) {
   if (!confirm('Are you sure you want to delete this employee?')) return;
 
   try {
-    const res = await fetch(`${API}/${empId}`, { method: 'DELETE' });
-    if (!res.ok) throw new Error('Failed to delete employee.');
+    const response = await apiRequest(`${API}/${empId}`, { method: 'DELETE' });
+
+    if (!response) return; // User was redirected
+
+    if (!response.ok) throw new Error('Failed to delete employee.');
 
     showToast('success', 'Employee deleted successfully.');
     await loadEmployees();
@@ -272,20 +350,23 @@ async function handleFormSubmit(e) {
   const empId = payload.emp_id;
   delete payload.emp_id;
 
-  elements.submitButton.disabled = true;
-  elements.submitButton.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Saving...';
+  if (elements.submitButton) {
+    elements.submitButton.disabled = true;
+    elements.submitButton.innerHTML = '<i class="bi bi-hourglass-split me-1"></i>Saving...';
+  }
 
   try {
     const method = empId ? 'PUT' : 'POST';
     const url = empId ? `${API}/${empId}` : API;
-    const res = await fetch(url, {
+    const response = await apiRequest(url, {
       method,
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(payload)
     });
 
-    if (!res.ok) {
-      const errorText = await res.text();
+    if (!response) return; // User was redirected
+
+    if (!response.ok) {
+      const errorText = await response.text();
       throw new Error(errorText || `Error ${empId ? 'updating' : 'adding'} employee.`);
     }
 
@@ -298,27 +379,73 @@ async function handleFormSubmit(e) {
     console.error(err);
     showToast('danger', err.message || `Failed to ${empId ? 'update' : 'add'} employee.`);
   } finally {
-    elements.submitButton.disabled = false;
-    elements.submitButton.innerHTML = '<i class="bi bi-save me-1"></i>Save';
+    if (elements.submitButton) {
+      elements.submitButton.disabled = false;
+      elements.submitButton.innerHTML = '<i class="bi bi-save me-1"></i>Save';
+    }
   }
 }
 
+// Initialize app
 document.addEventListener('DOMContentLoaded', () => {
+  // Check authentication
+  if (!isAuthenticated()) {
+    window.location.href = 'login.html';
+    return;
+  }
+
+  currentUser = getCurrentUser();
+
+  // Update navbar with user info
+  const navbarBrand = document.querySelector('.navbar-brand');
+  if (navbarBrand && currentUser) {
+    navbarBrand.textContent = `EMS DMS - ${currentUser.name} (${currentUser.role})`;
+  }
+
+  // Add logout button if not exists
+  const navbar = document.querySelector('.navbar');
+  if (navbar && !document.getElementById('logoutBtn')) {
+    const logoutDiv = document.createElement('div');
+    logoutDiv.className = 'd-flex align-items-center gap-2 ms-auto';
+    logoutDiv.innerHTML = `
+      <span class="text-white">${currentUser.name}</span>
+      <button class="btn btn-outline-light btn-sm" id="logoutBtn">
+        <i class="bi bi-box-arrow-right me-1"></i>Logout
+      </button>
+    `;
+    navbar.querySelector('.container-fluid').appendChild(logoutDiv);
+
+    document.getElementById('logoutBtn').addEventListener('click', logout);
+  }
+
   initDarkMode();
   loadEmployees();
 
-  elements.addForm.addEventListener('submit', handleFormSubmit);
-  elements.searchInput.addEventListener('input', handleSearch);
-  elements.resetFilters.addEventListener('click', () => {
-    elements.searchInput.value = '';
-    filteredData = [...employeesData];
-    renderTable();
-  });
+  if (elements.addForm) {
+    elements.addForm.addEventListener('submit', handleFormSubmit);
+  }
+
+  if (elements.searchInput) {
+    elements.searchInput.addEventListener('input', handleSearch);
+  }
+
+  if (elements.resetFilters) {
+    elements.resetFilters.addEventListener('click', () => {
+      if (elements.searchInput) elements.searchInput.value = '';
+      filteredData = [...employeesData];
+      renderTable();
+    });
+  }
 
   document.querySelectorAll('.sortable').forEach(th => {
     th.addEventListener('click', () => handleSort(th.dataset.sort));
   });
 
-  elements.addModal.addEventListener('hidden.bs.modal', resetModal);
-  document.getElementById('openAddModal').addEventListener('click', resetModal);
+  if (elements.addModal) {
+    elements.addModal.addEventListener('hidden.bs.modal', resetModal);
+  }
+
+  if (document.getElementById('openAddModal')) {
+    document.getElementById('openAddModal').addEventListener('click', resetModal);
+  }
 });

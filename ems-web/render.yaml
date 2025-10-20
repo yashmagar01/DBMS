@@ -1,0 +1,20 @@
+services:
+  - type: web
+    name: ems-backend
+    runtime: node
+    buildCommand: cd backend && npm install
+    startCommand: cd backend && npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DB_HOST
+        fromSecret: db-host
+      - key: DB_USER
+        fromSecret: db-user
+      - key: DB_PASS
+        fromSecret: db-password
+      - key: DB_NAME
+        fromSecret: db-name
+      - key: JWT_SECRET
+        fromSecret: jwt-secret
+    healthCheckPath: /api/employees

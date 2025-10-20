@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EMS - Login</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-6 col-lg-4">
+                <div class="card shadow">
+                    <div class="card-body p-4">
+                        <div class="text-center mb-4">
+                            <h2 class="card-title">Welcome Back</h2>
+                            <p class="text-muted">Sign in to your EMS account</p>
+                        </div>
+
+                        <!-- Status Alert -->
+                        <div id="statusAlert" class="alert d-none" role="alert"></div>
+
+                        <form id="loginForm" novalidate>
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                                <div class="invalid-feedback">Please enter a valid email address.</div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="password" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" required>
+                                <div class="invalid-feedback">Password is required.</div>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary w-100" id="loginBtn">
+                                <i class="bi bi-box-arrow-in-right me-2"></i>Sign In
+                            </button>
+                        </form>
+
+                        <div class="text-center mt-3">
+                            <small class="text-muted">
+                                Don't have an account? <a href="signup.html" class="text-decoration-none">Sign Up</a>
+                            </small>
+                        </div>
+
+                        <!-- Demo Credentials -->
+                        <div class="mt-4 p-3 bg-light rounded">
+                            <small class="text-muted">
+                                <strong>Demo Accounts:</strong><br>
+                                Admin: admin@ems.com / Admin@123<br>
+                                HR: hr@ems.com / Hr@123<br>
+                                Employee: employee@ems.com / Employee@123
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        const API_BASE = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+          ? 'http://localhost:3000/api'
+          : 'https://your-backend-domain.onrender.com/api';
+
+        // Check if already logged in
+        window.addEventListener('DOMContentLoaded', () => {
+            const token = localStorage.getItem('token');
+            if (token) {
+                window.location.href = 'index.html';
+            }
+        });
+
+        // Alert helper
+        function showAlert(type, message) {
+            const alertEl = document.getElementById('statusAlert');
+            alertEl.className = `alert alert-${type}`;
+            alertEl.textContent = message;
+            alertEl.classList.remove('d-none');
+
+            setTimeout(() => {
+                alertEl.classList.add('d-none');
+            }, 4000);
+        }
+
+        // Form submission
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+
+            if (!email || !password) {
+                showAlert('warning', 'Please enter both email and password.');
+                return;
+            }
+
+            const submitBtn = document.getElementById('loginBtn');
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="bi bi-hourglass-split me-2"></i>Signing In...';
+
+            try {
+                const response = await fetch(`${API_BASE}/auth/login`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    showAlert('success', 'Login successful! Redirecting...');
+
+                    // Store token and user info
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+
+                    // Redirect after short delay
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1000);
+                } else {
+                    showAlert('danger', data.error || 'Invalid credentials.');
+                }
+            } catch (error) {
+                console.error('Login error:', error);
+                showAlert('danger', 'Network error. Please check if the server is running.');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="bi bi-box-arrow-in-right me-2"></i>Sign In';
+            }
+        });
+    </script>
+</body>
+</html>
