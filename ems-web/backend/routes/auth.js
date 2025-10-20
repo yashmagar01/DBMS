@@ -1,6 +1,6 @@
 // backend/routes/auth.js
 const express = require('express');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const pool = require('../db');
 const { generateToken } = require('../utils/authMiddleware');
 
@@ -23,7 +23,7 @@ router.post('/signup', async (req, res) => {
     }
 
     // Hash password
-    const saltRounds = 10;
+    const saltRounds = 12;
     const password_hash = await bcrypt.hash(password, saltRounds);
 
     // Insert new user
