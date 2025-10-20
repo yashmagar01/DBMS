@@ -1,7 +1,7 @@
 -- EMS Aiven Database Setup Script
 -- Adapted from existing cloud_db_setup.sql for Aiven MySQL
 -- For deployment to Aiven MySQL (defaultdb)
-
+create database defaultdb;
 USE defaultdb;
 
 -- ============================================
