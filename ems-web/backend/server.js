@@ -12,7 +12,7 @@ const app = express();
 // CORS configuration for production
 const corsOptions = {
   origin: process.env.NODE_ENV === 'production'
-    ? process.env.FRONTEND_URL || 'https://your-frontend-domain.vercel.app'
+    ? (process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : ['https://dbms-puce.vercel.app'])
     : ['http://localhost:3000', 'http://127.0.0.1:3000', 'http://localhost:5500'],
   credentials: true,
   optionsSuccessStatus: 200
